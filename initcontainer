@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# at ./rundevenv container start, run this script to do some initalizations
+# set docker container prompt
+
+echo "export PS1='docker-gostuff> '" >> /root/.bashrc

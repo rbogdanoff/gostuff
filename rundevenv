@@ -1,0 +1,15 @@
+#!/bin/bash
+#
+# this script will launch a go container in interactive mode with the current working directory
+# a volumne.  Use it to do your builds
+#
+# cleanup - if for some reason there is an old gostuff-dev container already
+eval "docker ps -a -f name=gostuff-dev | grep gostuff-dev >/dev/null"
+if [ $? = 0 ]; then
+    docker rm gostuff-dev >/dev/null
+fi
+
+docker run  --rm -it --name gostuff-dev \
+       -v `pwd`:/go/src/github.com/rbogdanoff/gostuff \
+       --workdir /go/src/github.com/rbogdanoff/gostuff \
+       golang:1.10.3 /bin/bash -c "./initcontainer ; /bin/bash"
