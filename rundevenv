@@ -1,7 +1,30 @@
 #!/bin/bash
 #
 # this script will launch a go container in interactive mode with the current working directory
-# a volumne.  Use it to do your builds
+# a volumne OR if you use -mygopath you $GOPATH will be the volumn and the
+# workinng directory will be $GOPATH/this project
+scriptname=$0
+usage() {
+   echo "usage: $scriptname -mygopath"
+   echo "  -mygopath  will set container to use your GOPATH"
+   echo "  the default behavior is the container's GOPATH will be /go"
+}
+while [[ $# -gt 0 ]]
+do
+parm="$1"
+
+case $parm in
+    -mygopath)
+      MYGOPATH=true
+      shift # past argument
+    ;;
+    *)
+      usage
+      exit 1
+    ;;
+
+esac
+done
 #
 # cleanup - if for some reason there is an old gostuff-dev container already
 eval "docker ps -a -f name=gostuff-dev | grep gostuff-dev >/dev/null"
@@ -9,7 +32,11 @@ if [ $? = 0 ]; then
     docker rm gostuff-dev >/dev/null
 fi
 
+# docker run  --rm -it --name gostuff-dev \
+#        -v `pwd`:/go/src/github.com/rbogdanoff/gostuff \
+#        --workdir /go/src/github.com/rbogdanoff/gostuff \
+#        golang:1.10.3 /bin/bash -c "./initcontainer ; /bin/bash"
 docker run  --rm -it --name gostuff-dev \
-       -v `pwd`:/go/src/github.com/rbogdanoff/gostuff \
-       --workdir /go/src/github.com/rbogdanoff/gostuff \
+       -v $GOPATH:/go \
+       --workdir /go \
        golang:1.10.3 /bin/bash -c "./initcontainer ; /bin/bash"
