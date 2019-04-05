@@ -32,11 +32,11 @@ if [ $? = 0 ]; then
     docker rm gostuff-dev >/dev/null
 fi
 
-# docker run  --rm -it --name gostuff-dev \
-#        -v `pwd`:/go/src/github.com/rbogdanoff/gostuff \
-#        --workdir /go/src/github.com/rbogdanoff/gostuff \
-#        golang:1.10.3 /bin/bash -c "./initcontainer ; /bin/bash"
 docker run  --rm -it --name gostuff-dev \
-       -v $GOPATH:/go \
-       --workdir /go \
+       -v `pwd`:/go/src/github.com/rbogdanoff/gostuff \
+       --workdir /go/src/github.com/rbogdanoff/gostuff \
        golang:1.10.3 /bin/bash -c "./initcontainer ; /bin/bash"
+#docker run  --rm -it --name gostuff-dev \
+#       -v $GOPATH:/go \
+#       --workdir /go \
+#       golang:1.10.3 /bin/bash -c "./initcontainer ; /bin/bash"
